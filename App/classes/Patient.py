@@ -1,25 +1,19 @@
-#Patient class
-class Patient:
 
+
+
+
+#Patient class in this class we are gonna save the values of the XML and the matrix of each patient 
+
+#from classes.List import List_for_cells
+
+
+class Patient:
     #Constructor
     def __init__(self,name,age,period,matrix) -> None:
-        self.__name = name,
-        self.__age = age,
-        self.__period = period,
-        self.__matrix = matrix
-    
-    #Getters and setters
-    @property
-    def name(self):
-        return self.__name
-    @property
-    def age(self):
-        return self.__age
-    @property
-    def period(self):
-        return self.__period
-    @property
-    def period(self):
-        return self.__matrix
+        self.name = name,
+        self.age = age,
+        self.period = period,
+        self.matrix = matrix,
+        self.matrix_of_cells = None
 
 

@@ -42,6 +42,11 @@ CLASES
     - Clase de Infected_Cell -> Con posicion en fila y columna, contagiada o no, y color para el tkinter
 
 
+Generar Matrix
+ - Primero hacer que se cree la matriz de mxm
+ - Luego insertar en cada posición las celulas correspondientes a cada casilla. 
+ - De ahi ya se tendrá la matriz completa 
+
 COMIENZO 
 
 1. Menu 
