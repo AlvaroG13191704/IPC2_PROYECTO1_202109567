@@ -1,10 +1,10 @@
 # Imports
+
 from colorama import Fore
 import xml.etree.ElementTree as ET
 from classes.Cell import Cell
 from classes.Patient import Patient
 from classes.List import List_for_cells
-#from components.read_asign_file import upload_file
 from components.select_and_execute_patient import select_patient
 
 #Global variables
@@ -36,7 +36,7 @@ def generate_menu(options,exit_option):
 def main_menu():
     options = {
         '1':('Cargar un archivo',upload_file),
-        '2':('Ver paciente',select_patient),
+        '2':('Ver pacientes',lambda: select_patient(list_of_patients)),
         '3':('Salir',exit),
     }
     generate_menu(options,'3')
@@ -47,8 +47,7 @@ def upload_file():
     patients = tree.getroot()
     #print each patient
     for patient in patients:
-        print('-----------------------------------------------------------')
-        print(f'Paciente')
+        #print(f'Paciente')
         for personal_data in patient.iter('datospersonales'):
             #Print personal_data
             name = personal_data.find("nombre").text
@@ -58,13 +57,18 @@ def upload_file():
         period = patient.find("periodos").text
         m =  int(patient.find("m").text)
         
-        patient_obj = Patient(str(name),str(age),int(period),int(m))
-        print(f'Nombre: {patient_obj.name} \nedad: {patient_obj.age} {patient_obj.period} {patient_obj.matrix} {period} {m}')
+        # Create the patient object
+        patient_obj = Patient(name,age,period,m)
+        patient_obj.name = name
+        patient_obj.age = int(age)
+        patient_obj.period = int(period)
+        patient_obj.matrix = m
+        #print(f'Nombre: {patient_obj.name} \nedad: {patient_obj.age} Periodos: {patient_obj.period} Matrix: {patient_obj.matrix}')
         #find the cells
         infected_cells = []
         for rack in patient.iter('rejilla'):
             for cell in rack:
-                cell_infected = Cell(int(cell.attrib["f"]),int(cell.attrib["c"]),True)
+                cell_infected = Cell(int(cell.attrib["f"]),int(cell.attrib["c"]),True,1)
                 infected_cells.append(cell_infected)
 
         #Create the matrix
@@ -77,22 +81,16 @@ def upload_file():
                     if i == n.x and j == n.y:
                         patient_obj.matrix_of_cells.edit_pos(n,i,j,m)
                     elif patient_obj.matrix_of_cells.get_pos(i,j,m) == None:
-                        cell = Cell(i,j,False)
+                        cell = Cell(i,j,False,0)
                         patient_obj.matrix_of_cells.edit_pos(cell,i,j,m)
 
         #append the patient to the global navite list
         global list_of_patients
         list_of_patients.append(patient_obj)
-        #This goint to help us later
-        # for i in range(m):
-        #     for j in range(m):
-        #         #print('',fimage.png'( ({i,j})->{patient_obj.matrix_of_cells.get_pos(i,j,m).getSymbol()})',end='')
-        #         print('',f'{patient_obj.matrix_of_cells.get_pos(i,j,m).getSymbol()}',end='')
-        #     print('\n')
+        
 
-        print('Se ha leido y guardado el paciente exitosamente')
-
-        print('-----------------------------------------------------------')
+    print('Se ha leido y guardado los pacientes exitosamente')
+    print('-----------------------------------------------------------')
 
 def exit():
     print('Gracías por usar nuestra aplicación ')

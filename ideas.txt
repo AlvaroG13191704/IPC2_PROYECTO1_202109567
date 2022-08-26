@@ -54,3 +54,5 @@ COMIENZO
     - Cargar archivo - XML
     - Escoger estudiante 
     - Salir 
+----------------------------LOGICA---------------------------
+- Entonces el primero for es para evaluar y cambiar y el otro es para confirmar y pintar

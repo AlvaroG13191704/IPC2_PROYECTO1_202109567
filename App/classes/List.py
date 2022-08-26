@@ -41,7 +41,7 @@ class List_for_cells:
             if aux.pos == pos:
                 return  aux.value #f'({aux.value.x},{aux.value.y} - {aux.value.getSymbol()})'
             aux = aux.next
-        return 'No object was found'
+        return None
     
     def edit_pos(self,value,x,y,m):
         pos = self.row_mayor(y,x,m)
