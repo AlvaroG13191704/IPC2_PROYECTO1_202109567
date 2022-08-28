@@ -5,7 +5,7 @@ Proyecto #1
 
 - Células contagiadas tienen un comportamiento que se evidencia periodicamente.
     1. Toda célula contagiada continúa contagiada si tiene exactamente 2 o 3 células contagiadas en las celdas vecinas, sino sana para el otro periodo.
-    2. Cualquier célula sana que tenga exactamente 3 células contagiadas en las celdas vecinas, se contagia pra el otro periodo.
+    2. Cualquier célula sana que tenga exactamente 3 células contagiadas en las celdas vecinas, se contagia para el otro periodo.
 
 - Se estudia las enfermedades toamndo rejillas de células que contienen un patrón inicial de células sanas y contagiadas y N periodos
     A. El patrón inicial se repita siempre después de N periodos -> Caso grave -> Si N = 1 el paciente morirá a causa de la enfermedad 

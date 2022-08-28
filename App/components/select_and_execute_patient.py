@@ -19,8 +19,7 @@ def select_patient(list_of_patients):
                 execute_patient(patient)
                 
                 
-
-#
+#This func execute any patient
 def execute_patient(patient):
     #Variables
     name = patient.name
@@ -66,7 +65,7 @@ def execute_patient(patient):
                     # (x,y-1)
                     cell_4 = patient.matrix_of_cells.get_pos(x,y-1,m)
                     # (x,y+1)
-                    cell_5 = patient.matrix_of_cells.get_pos(x-1,y-1,m)
+                    cell_5 = patient.matrix_of_cells.get_pos(x,y+1,m)
                     # (x+1,y-1)
                     cell_6 = patient.matrix_of_cells.get_pos(x+1,y-1,m)
                     # (x+1,y)
@@ -77,19 +76,27 @@ def execute_patient(patient):
                     # This fun return ne number neighbours cells infected 
                     cells = [cell_1,cell_2,cell_3,cell_4,cell_5,cell_6,cell_7,cell_8]
                     num_of_infected_cells = verified(cells)
+
+                    #If the number of cells infected is 2 o 3 the cell get infected 
+                    if main_cell.getSymbol() == '▒':
+                        if num_of_infected_cells == 3:
+                            main_cell.post_infected = 1
+                        else: 
+                            main_cell.post_infected = 0
+                            
+                    elif main_cell.getSymbol() == '█':
+                        if num_of_infected_cells == 3 or num_of_infected_cells == 2:
+                            main_cell.post_infected = 1
+                        else: 
+                            main_cell.post_infected = 0
                     
-            # CHANGE THIS
-                    # Now change their
-                    if num_of_infected_cells == 2 or num_of_infected_cells == 3:
-                        main_cell.post_infected = 1
-                    elif num_of_infected_cells == 0:
-                        main_cell.post_infected = 0
-            # Second for to change to infected
+            #
             for x in range(m):
                 for y in range(m):
-                    cell = patient.matrix_of_cells.get_pos(x,y,m)
-                    if cell.post_infected == 1:
-                        cell.infected = True
+                    if patient.matrix_of_cells.get_pos(x,y,m).post_infected == 1:
+                        patient.matrix_of_cells.get_pos(x,y,m).infected = True
+                    else:
+                        patient.matrix_of_cells.get_pos(x,y,m).infected = False
 
         elif option == 2:
             print('Acá se crea el XML con el diagnostico, una función probablemente')
@@ -97,15 +104,14 @@ def execute_patient(patient):
         else:
             print('Ingrese una opción valida!')
 
-    
+#This functions count the neighbours cells infected 
 def verified(list):
     c = 0
     for cell in list:
         if cell is not None:
-            if cell.post_infected == 1:
+            if cell.getSymbol() == '█':
                 c +=1
     return c
-
 
 #This fun print any matrix
 def print_matrix(m,patient):

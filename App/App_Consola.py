@@ -63,7 +63,7 @@ def upload_file():
         patient_obj.age = int(age)
         patient_obj.period = int(period)
         patient_obj.matrix = m
-        #print(f'Nombre: {patient_obj.name} \nedad: {patient_obj.age} Periodos: {patient_obj.period} Matrix: {patient_obj.matrix}')
+        
         #find the cells
         infected_cells = []
         for rack in patient.iter('rejilla'):

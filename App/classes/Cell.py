@@ -11,9 +11,9 @@ class Cell:
         
     def getSymbol(self):
         if self.infected == False:
-            return '█'
-        else:
             return '▒'
+        else:
+            return '█'
     
     def get_num(self):
         return self.post_infected
