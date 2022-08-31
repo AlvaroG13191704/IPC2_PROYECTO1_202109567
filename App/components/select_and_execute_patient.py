@@ -1,4 +1,8 @@
+from os import startfile, system
 from colorama import Fore
+from classes.Patient import Patient
+
+from classes.List import List_for_cells
 
 def select_patient(list_of_patients):
     print(Fore.CYAN +'-----------------Pacientes-------------------')
@@ -10,18 +14,30 @@ def select_patient(list_of_patients):
 
     print(Fore.CYAN +'-----------Seleccione un paciente que desea analizar-------------')
     while True:
-        option = int(input('Ingrese el número del paciente a evaluar: '))
+        print('Ingrese el número del paciente a evaluar \n"0" para regresar al menu principal')
+        option = int(input())
         #Select and evaluate
+        
+        try:
+            if option == 0:
+                break
+        except ValueError:
+            print('Ingrese una opción valida')
+
         for n in range(len(list_of_patients)+1):
-            if option == n:
-                patient = dict_of_patients[option]
-                print(f'Has seleccionado al paciente -> {patient.name}')
-                execute_patient(patient)
+            try:
+                if option == n:
+                    patient = dict_of_patients[option]
+                    print(f'Has seleccionado al paciente -> {patient.name}')
+                    execute_patient(patient)
+            except ValueError:
+                print('Ingrese una opción valida')
                 
                 
 #This func execute any patient
 def execute_patient(patient):
     #Variables
+    list_of_each_period = []
     name = patient.name
     age = patient.age
     period = patient.period
@@ -36,9 +52,19 @@ def execute_patient(patient):
     print(Fore.YELLOW + '--------------------Cuadrilla Celular----------------------------')
     #This goint to help us later
     while True:
+        # Variable 
+        #Generate a new list
+        patient_matrix = List_for_cells()
+        patient_matrix.create_matrix(m*m)
+        for x in range(m):
+            for y in range(m):
+                patient_matrix.edit_pos(patient.matrix_of_cells.get_pos(x,y,m).getSymbol(),x,y,m)
+        
+        list_of_each_period.append(patient_matrix)
+        #another things 
         print(f'Periodos analizados -> {c_periods}')
         print_matrix(m,patient)
-        print(f'1. Para ejecutar un periodo \n2. Terminar evaluación ')
+        print(f'1. Para ejecutar un periodo \n2. Terminar evaluación y realizar diagnostico')
         option = int(input('Ingrese una opción: '))
         if option == 1:
             c_periods += 1
@@ -90,19 +116,37 @@ def execute_patient(patient):
                         else: 
                             main_cell.post_infected = 0
                     
-            #
+            #In this second for, the visual changed is added 
             for x in range(m):
                 for y in range(m):
                     if patient.matrix_of_cells.get_pos(x,y,m).post_infected == 1:
                         patient.matrix_of_cells.get_pos(x,y,m).infected = True
                     else:
                         patient.matrix_of_cells.get_pos(x,y,m).infected = False
-
+            
         elif option == 2:
-            print('Acá se crea el XML con el diagnostico, una función probablemente')
+            # If the client select this option
+            # A XLM will be create with the results 
+            # An Graphviz with the last matrix that was made
+            print('Se ha creado un gráfico del ultimo periodo analizado')
+            print_graphviz(m,patient)
+            # Testing the periods to generate a diagnostic
+            diagnostic(list_of_each_period,m)
             break
         else:
             print('Ingrese una opción valida!')
+
+
+def diagnostic(list,m):
+    print(list)
+    for matrix in list:
+        for i in range(m):
+            for j in range(m):
+                print('',f'{matrix.get_pos(i,j,m)}',end='')
+            print('\n')
+
+
+
 
 #This functions count the neighbours cells infected 
 def verified(list):
@@ -119,3 +163,79 @@ def print_matrix(m,patient):
         for j in range(m):
             print('',f'{patient.matrix_of_cells.get_pos(i,j,m).getSymbol()}',end='')
         print('\n')
+
+
+# Crear un graphviz
+def print_graphviz(m,patient):
+    graph = '''
+digraph Patient{
+    node [shape=box, nodesep=1, fillcolor=blue, style=filled]
+    compound=true
+    edge[fontcolor="black" color="#ff5400"]
+    subgraph cluster_periodo {
+        bgcolor = "#398D9C"
+'''
+    graph += f'''
+        label = "Paciente: {patient.name} - Periodo N.{patient.period}"
+    '''
+    for x in range(m):
+        for y in range(m):
+            cell = patient.matrix_of_cells.get_pos(x,y,m)
+            graph += f'''
+        nodoF{str(x)}_C{str(y)}[label=" ({x},{y})", fillcolor="{cell.getColor()}"];
+    '''
+    # generate the ranks    
+    cc = 0
+    while m > cc:
+        string = ''
+        rank = '{rank = same'
+        rank_f = '}' 
+        for x in range(m):
+            rank_value = f''';nodoF{str(cc)}_C{str(x)}'''
+            string += rank_value
+        graph += f'''
+        {rank}{string}{rank_f}
+        '''
+        cc+=1
+    # generate the unions betwewen columns
+    cc_g = 0
+    while m > cc_g:
+        string_2 = ''
+        for x in range(m):
+            rank_value_2 = f'''nodoF{str(cc_g)}_C{str(x)}'''
+            string_2 += f'{rank_value_2} -> '
+        new_string = string_2[:-4]
+
+        if not cc_g % 2 == 0:
+            graph += f'''
+        {new_string} [dir=back];
+        '''
+        else:
+            graph += f'''
+        {new_string};
+        '''
+        cc_g+=1
+    # generate the unions betwewen rows
+    string_3 = ''
+    for x in range(m):
+        union = f'''nodoF{str(x)}_C{str(0)} -> '''
+        string_3 += union
+    new_string_2 = string_3[:-4]
+    graph += f'''
+    {new_string_2};
+    '''
+    graph += '''
+    }   
+    '''
+    graph += '''
+}   
+    '''
+    #generate  graphviz
+    # compilated
+    # miArchivo = open(f'graphviz.dot','w')
+    # miArchivo.write(graph)
+    # miArchivo.close()
+    # system(f'dot -Tpng graphviz.dot -o {patient.name}_gráfica.png')
+    # system(f'cd ./{patient.name}_gráfica.png')
+    # startfile(f'{patient.name}_gráfica.png')
+    #print(graph)

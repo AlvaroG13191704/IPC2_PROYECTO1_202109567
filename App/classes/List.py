@@ -53,4 +53,5 @@ class List_for_cells:
                 break
             aux = aux.next
     
-
+    #Made the graph
+    

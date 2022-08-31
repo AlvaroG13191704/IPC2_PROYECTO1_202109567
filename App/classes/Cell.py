@@ -14,10 +14,11 @@ class Cell:
             return '▒'
         else:
             return '█'
-    
-    def get_num(self):
-        return self.post_infected
+            
+    def getColor(self):
+        if self.infected == False:
+            return "#F6F905"
+        else: 
+            return "#EAA212"
 
-
-    
     

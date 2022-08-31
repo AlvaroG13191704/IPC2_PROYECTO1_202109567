@@ -56,3 +56,16 @@ COMIENZO
     - Salir 
 ----------------------------LOGICA---------------------------
 - Entonces el primero for es para evaluar y cambiar y el otro es para confirmar y pintar
+
+
+
+
+DIAGNOSTICO 
+A. Si el patrón inicial se repite siempre después de N periodos -> grave
+B. Si N = 1 el paciente -> morirá 
+C. Si el patrón no se repite en ninguno de los periodos -> leve 
+
+Crear ->
+
+Mortal = 1 
+Grave = 
