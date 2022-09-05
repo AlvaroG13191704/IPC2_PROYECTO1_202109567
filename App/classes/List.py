@@ -9,7 +9,7 @@ class List_for_cells:
     def __init__(self,) -> None:
         self.size = 0
         self.head: Node  = None
-    
+
     #Insert a Node 
     def append(self,value):
         if self.head == None:
@@ -53,5 +53,5 @@ class List_for_cells:
                 break
             aux = aux.next
     
-    #Made the graph
+    #evaluate
     

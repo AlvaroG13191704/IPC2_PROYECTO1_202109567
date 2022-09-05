@@ -1,7 +1,8 @@
 from os import startfile, system
+from re import M
+from textwrap import indent
+import xml.etree.ElementTree as ET
 from colorama import Fore
-from classes.Patient import Patient
-
 from classes.List import List_for_cells
 
 def select_patient(list_of_patients):
@@ -128,25 +129,95 @@ def execute_patient(patient):
             # If the client select this option
             # A XLM will be create with the results 
             # An Graphviz with the last matrix that was made
-            print('Se ha creado un gráfico del ultimo periodo analizado')
+            print(Fore.CYAN+'----------------------------')
+            print('SE HA CREADO UN DIAGNOSTICO!')
+            print(Fore.CYAN+'----------------------------')
             print_graphviz(m,patient)
             # Testing the periods to generate a diagnostic
-            diagnostic(list_of_each_period,m)
+            diagnostic(patient,list_of_each_period,m)
             break
         else:
             print('Ingrese una opción valida!')
 
 
-def diagnostic(list,m):
-    print(list)
-    for matrix in list:
-        for i in range(m):
-            for j in range(m):
-                print('',f'{matrix.get_pos(i,j,m)}',end='')
-            print('\n')
+def diagnostic(patient,list,m):
+    #Variables
+    list_of_diagnostic = []
+    pattern_a = 'A'
+    pattern_b = 'B'
+    pattern_c = 'C'
+    pattern_r = 'R'
+    #print(list)
+    for i in range(m):
+        for j in range(m):
+            for matrix in range(len(list)-1):
+                if list[matrix].get_pos(i,j,m) == list[matrix+1].get_pos(i,j,m):
+                    pass
+    # for i in range(len(list)):
+    #     for j in range(i+1,len(list)):
+    #         if list[i] == list[j]:
+    #             list_of_diagnostic.append(pattern_a)
+    #         else:
+    #             list_of_diagnostic.append(pattern_r)
+    # for matrix in range(len(list)-1):
+    #     if list[matrix] ==  list[matrix+1]:
+    #         list_of_diagnostic.append(pattern_a)
+    #     else: 
+    #         list_of_diagnostic.append(pattern_r)
+            
+    print(list_of_diagnostic)
+    # Create a XML
+    xml_response(patient)
 
 
+def xml_response(patient):
+    #decorate
+    def indent(elem,level=0):
+        i = "\n" + level*"  "
+        j = "\n" + (level-1)*"  "
+        if len(elem):
+            if not elem.text or not elem.text.strip():
+                elem.text = i + "  "
+            if not elem.tail or not elem.tail.strip():
+                elem.tail = i
+            for subelem in elem:
+                indent(subelem, level+1)
+            if not elem.tail or not elem.tail.strip():
+                elem.tail = j
+        else:
+            if level and (not elem.tail or not elem.tail.strip()):
+                elem.tail = j
+        return elem
+        
+    patients = ET.Element('pacientes')
+    person = ET.SubElement(patients,'paciente')
 
+    personal_data = ET.SubElement(person,'datospersonales')
+    name = ET.SubElement(personal_data,'nombre')
+    age = ET.SubElement(personal_data,'edad')
+    name.text = patient.name
+    age.text = str(patient.age)
+
+    period = ET.SubElement(person,'periodos')
+    period.text = str(patient.period)
+
+    matrix = ET.SubElement(person,'m')
+    matrix.text = str(patient.matrix)
+
+    result = ET.SubElement(person,'resultado')
+    result.text = 'Leve'
+
+    n = ET.SubElement(person,'n')
+    n.text = '99'
+
+    n1 = ET.SubElement(person,'n1')
+    n1.text = '1'
+
+    # EXPORT
+    tree = ET.ElementTree(indent(patients))
+    tree.write(f'{patient.name}_diagnostico.xml',xml_declaration=True, encoding='utf-8')
+
+    
 
 #This functions count the neighbours cells infected 
 def verified(list):

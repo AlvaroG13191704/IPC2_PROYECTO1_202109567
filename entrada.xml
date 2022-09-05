@@ -17,6 +17,21 @@
    </paciente>
    <paciente>
       <datospersonales>
+         <nombre>Paciente AAAAAAAAAAAA</nombre>
+         <edad>24</edad>
+      </datospersonales>
+      <periodos>12</periodos>
+      <m>10</m>
+      <rejilla>
+         <celda f="0" c="0" />
+         <celda f="0" c="1" />
+         <celda f="1" c="0" />
+         <celda f="1" c="1" />
+         <celda f="1" c="5" />
+      </rejilla>
+   </paciente>
+   <paciente>
+      <datospersonales>
          <nombre>Vegeta777</nombre>
          <edad>33</edad>
       </datospersonales>
