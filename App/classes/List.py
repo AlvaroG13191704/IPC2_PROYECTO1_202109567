@@ -39,7 +39,7 @@ class List_for_cells:
 
         while aux != None:
             if aux.pos == pos:
-                return  aux.value #f'({aux.value.x},{aux.value.y} - {aux.value.getSymbol()})'
+                return  aux.value 
             aux = aux.next
         return None
     

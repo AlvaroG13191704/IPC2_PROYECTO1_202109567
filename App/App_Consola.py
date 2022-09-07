@@ -9,7 +9,7 @@ from components.select_and_execute_patient import select_patient
 
 #Global variables
 list_of_patients = []
-
+# This func generate a menu 
 def show_menu(options):
     print(Fore.CYAN + 'Bienvenidos al laboratorio de investigación epidemiológica de Guatemala')
     print(Fore.CYAN + '------------------------------------------------------------------------')

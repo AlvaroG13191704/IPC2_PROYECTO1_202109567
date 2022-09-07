@@ -7,7 +7,6 @@ class Cell:
         self.infected = infected
         self.post_infected =n_infected
         self.pos = pos
-        self.next = None
         
     def getSymbol(self):
         if self.infected == False:

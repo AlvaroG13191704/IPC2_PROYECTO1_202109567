@@ -1,6 +1,4 @@
 from os import startfile, system
-from re import M
-from textwrap import indent
 import xml.etree.ElementTree as ET
 from colorama import Fore
 from classes.List import List_for_cells
@@ -143,6 +141,7 @@ def execute_patient(patient):
 def diagnostic(patient,list,m):
     #Variables
     list_of_diagnostic = []
+    data = []
     pattern_a = 'A'
     pattern_b = 'B'
     pattern_c = 'C'
@@ -152,7 +151,8 @@ def diagnostic(patient,list,m):
         for j in range(m):
             for matrix in range(len(list)-1):
                 if list[matrix].get_pos(i,j,m) == list[matrix+1].get_pos(i,j,m):
-                    pass
+                    data.append(pattern_a)
+    
     # for i in range(len(list)):
     #     for j in range(i+1,len(list)):
     #         if list[i] == list[j]:
@@ -164,14 +164,16 @@ def diagnostic(patient,list,m):
     #         list_of_diagnostic.append(pattern_a)
     #     else: 
     #         list_of_diagnostic.append(pattern_r)
+
+    # print(list_of_diagnostic)
             
-    print(list_of_diagnostic)
+    # print(list_of_diagnostic)
     # Create a XML
     xml_response(patient)
 
 
 def xml_response(patient):
-    #decorate
+    # With this func me decorate our XMl to give him a good apparience 
     def indent(elem,level=0):
         i = "\n" + level*"  "
         j = "\n" + (level-1)*"  "
@@ -188,10 +190,10 @@ def xml_response(patient):
             if level and (not elem.tail or not elem.tail.strip()):
                 elem.tail = j
         return elem
-        
+    # Create the ELement
     patients = ET.Element('pacientes')
     person = ET.SubElement(patients,'paciente')
-
+    # Sub element that contain the patient information
     personal_data = ET.SubElement(person,'datospersonales')
     name = ET.SubElement(personal_data,'nombre')
     age = ET.SubElement(personal_data,'edad')
@@ -303,10 +305,10 @@ digraph Patient{
     '''
     #generate  graphviz
     # compilated
-    # miArchivo = open(f'graphviz.dot','w')
-    # miArchivo.write(graph)
-    # miArchivo.close()
-    # system(f'dot -Tpng graphviz.dot -o {patient.name}_gráfica.png')
-    # system(f'cd ./{patient.name}_gráfica.png')
-    # startfile(f'{patient.name}_gráfica.png')
-    #print(graph)
+    miArchivo = open(f'graphviz.dot','w')
+    miArchivo.write(graph)
+    miArchivo.close()
+    system(f'dot -Tpng graphviz.dot -o {patient.name}_gráfica.png')
+    system(f'cd ./{patient.name}_gráfica.png')
+    startfile(f'{patient.name}_gráfica.png')
+    # print(graph)

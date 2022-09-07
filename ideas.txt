@@ -69,3 +69,6 @@ Crear ->
 
 Mortal = 1 
 Grave = 
+
+
+
